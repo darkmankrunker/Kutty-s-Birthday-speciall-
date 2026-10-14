@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday My Kutty</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1e1e2f;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    .laptop {
+      width: 92%;
+      max-width: 780px;
+      background: #111118;
+      border-radius: 16px 16px 6px 6px;
+      padding: 14px 14px 0;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.55);
+      display: none;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+    }
+    .laptop.show {
+      display: block;
+      opacity: 1;
+    }
+
+    .screen {
+      background: #d6eaf5;
+      border-radius: 10px 10px 0 0;
+      aspect-ratio: 16 / 10.2;
+      position: relative;
+      overflow: hidden;
+      background-image: 
+        linear-gradient(#b8d4e3 1.5px, transparent 1.5px),
+        linear-gradient(90deg, #b8d4e3 1.5px, transparent 1.5px);
+      background-size: 32px 32px;
+    }
+    .laptop-base {
+      height: 20px;
+      background: #1a1a24;
+      border-radius: 0 0 10px 10px;
+      position: relative;
+    }
+    .laptop-base::after {
+      content: '';
+      position: absolute;
+      bottom: -9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 9px;
+      background: #111118;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .star { position: absolute; top: 22px; left: 28px; font-size: 32px; color: #4a90c2; }
+    .web  { position: absolute; top: 18px; right: 32px; font-size: 36px; opacity: 0.75; transform: rotate(8deg); }
+
+    /* Accept */
+    #accept-screen { display: block; opacity: 1; }
+    #accept-screen .title-text {
+      position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
+      font-size: 26px; font-weight: 700; color: #3d7a9c; letter-spacing: 1px;
+    }
+    .ghost-img {
+      position: absolute;
+      top: 47%;
+      left: 50%;
+      transform: translate(-50%, -55%);
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 15px rgba(0,0,0,0.15));
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translate(-50%, -55%) translateY(0); }
+      50% { transform: translate(-50%, -55%) translateY(-12px); }
+    }
+    .heart-buttons {
+      position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 25px;
+    }
+    .heart-btn {
+      min-width: 90px;
+      height: 44px;
+      background: #e85a7a; border: none; border-radius: 40px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700; color: white;
+      box-shadow: 0 6px 15px rgba(232, 90, 122, 0.4);
+      transition: all 0.2s;
+      padding: 0 20px;
+    }
+    .heart-btn:hover { transform: scale(1.1); background: #d44a6a; }
+
+    /* No Screen */
+    #no-screen .title-text {
+      position: absolute; top: 55px; left: 50%; transform: translateX(-50%);
+      font-size: 24px; font-weight: 700; color: #3d7a9c;
+    }
+    .sad-img {
+      position: absolute;
+      top: 47%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 190px;
+      height: 190px;
+      object-fit: contain;
+    }
+    .sorry-btn {
+      position: absolute;
+      bottom: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #e85a7a;
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 40px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(232, 90, 122, 0.4);
+    }
+    .sorry-btn:hover { transform: translateX(-50%) scale(1.08); }
+
+    /* Choose Gifts */
+    #gifts-screen .title-text {
+      position: absolute; top: 48px; left: 50%; transform: translateX(-50%);
+      font-size: 26px; font-weight: 700; color: #3d7a9c;
+    }
+    .gifts-row {
+      position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%);
+      display: flex; gap: 22px; align-items: flex-end; flex-wrap: wrap; justify-content: center;
+    }
+    .gift-item {
+      text-align: center; cursor: pointer; transition: transform 0.25s;
+    }
+    .gift-item:hover { transform: scale(1.1) translateY(-8px); }
+    .gift-item img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.12));
+    }
+    .gift-label { margin-top: 8px; font-size: 13px; color: #5a9bb8; font-weight: 600; }
+
+    /* Gift Content */
+    .gift-content {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 20px 25px 70px; text-align: center;
+      overflow: hidden;
+    }
+    .gift-content h2 {
+      color: #3d7a9c; font-size: 23px; margin-bottom: 12px;
+    }
+
+    .letter-paper {
+      background: #fffef5;
+      padding: 22px 26px;
+      border-radius: 4px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+      max-width: 520px;
+      width: 100%;
+      text-align: left;
+      font-family: Georgia, 'Times New Roman', serif;
+      color: #4a3f35;
+      line-height: 1.65;
+      font-size: 14.5px;
+      max-height: 310px;
+      overflow-y: auto;
+      position: relative;
+    }
+    .letter-paper::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 8px;
+      background: repeating-linear-gradient(90deg, #e8d5c4 0px, #e8d5c4 8px, transparent 8px, transparent 16px);
+    }
+
+    .flowers-msg {
+      color: #4a8aa8; font-size: 14.5px; line-height: 1.65; max-width: 520px;
+      background: rgba(255,255,255,0.7);
+      padding: 20px 24px; border-radius: 14px;
+      max-height: 310px;
+      overflow-y: auto;
+      text-align: left;
+    }
+
+    .photos-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .photos-grid img {
+      width: 100%;
+      height: 85px;
+      object-fit: cover;
+      border-radius: 9px;
+      border: 2px solid white;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    }
+
+    .nav-buttons {
+      position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 12px;
+    }
+    .nav-btn {
+      padding: 9px 20px; border-radius: 40px; border: none;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .back-btn { background: #a8c8d8; color: #2a5a70; }
+    .next-btn { background: linear-gradient(180deg, #8ecae6, #6bb3d9); color: white; }
+
+    /* Heart */
+    #heart-final {
+      position: relative;
+      width: 100%;
+      height: 320px;
+    }
+    #heart-final .p {
+      position: absolute;
+      width: 46px;
+      height: 46px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid white;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      transition: transform 0.25s;
+    }
+    #heart-final .p:hover {
+      transform: scale(1.15);
+      z-index: 10;
+    }
+    #heart-final .spark {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #ff6b9d;
+      border-radius: 50%;
+      animation: sparkle 1.8s infinite ease-in-out;
+    }
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    /* Cake */
+    .bunting {
+      position: absolute; top: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 5px; z-index: 5;
+    }
+    .flag {
+      width: 34px; height: 24px; background: #6bb3d9;
+      clip-path: polygon(0 0, 100% 0, 100% 68%, 50% 100%, 0 68%);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 11px; font-weight: 700;
+    }
+    .flag:nth-child(even) { background: #8fc8e3; }
+
+    .title {
+      position: absolute; top: 72px; left: 50%; transform: translateX(-50%);
+      font-size: 30px; font-weight: 700; color: #3d7a9c;
+      text-shadow: 1px 1px 0 rgba(255,255,255,0.7); z-index: 5;
+    }
+    .subtitle {
+      position: absolute; top: 112px; left: 50%; transform: translateX(-50%);
+      font-size: 13px; letter-spacing: 3px; color: #5a9bb8; font-weight: 600; z-index: 5;
+    }
+    .blow-btn {
+      position: absolute; top: 148px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(180deg, #8ecae6, #6bb3d9);
+      color: white; border: 2px solid #5a9fc0;
+      padding: 9px 24px; border-radius: 40px;
+      font-size: 13px; font-weight: 700; letter-spacing: 1px;
+      cursor: pointer; z-index: 20;
+    }
+    .blow-btn:hover { transform: translateX(-50%) scale(1.05); }
+    .blow-btn:disabled { opacity: 0.6; }
+
+    .cake-wrap {
+      position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); z-index: 10;
+    }
+    .candles {
+      position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 16px; z-index: 12;
+    }
+    .candle {
+      width: 10px; height: 36px;
+      background: linear-gradient(to right, #f5efe0, #fff);
+      border-radius: 3px; position: relative;
+    }
+    .flame {
+      position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+      width: 13px; height: 22px;
+      background: radial-gradient(circle at 50% 75%, #fff8b0 8%, #ffb347 35%, #ff6b35 70%, transparent);
+      border-radius: 50% 50% 30% 30%;
+      animation: flicker 0.13s infinite alternate;
+      filter: drop-shadow(0 0 6px #ff9a3c);
+      transition: all 0.5s ease;
+    }
+    .flame.out { opacity: 0; transform: translateX(-50%) scale(0.1); height: 3px; }
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1) rotate(-3deg); }
+      to   { transform: translateX(-50%) scale(1.07) rotate(3deg); }
+    }
+    .cake { width: 160px; height: 90px; position: relative; }
+    .layer-bottom {
+      position: absolute; bottom: 0; width: 160px; height: 45px;
+      background: #f8e8d0; border-radius: 10px 10px 14px 14px;
+      box-shadow: inset 0 -9px 0 #e6d0b0;
+    }
+    .layer-top {
+      position: absolute; bottom: 38px; left: 10px; width: 140px; height: 36px;
+      background: #fff6e8; border-radius: 9px 9px 8px 8px;
+      box-shadow: inset 0 -7px 0 #f0e0c8;
+    }
+    .icing {
+      position: absolute; top: -11px; left: 0; right: 0; height: 20px;
+      background: #f5d0c5; border-radius: 50% 50% 0 0;
+    }
+    .icing::before, .icing::after {
+      content: ''; position: absolute; width: 16px; height: 20px;
+      background: #f5d0c5; border-radius: 0 0 50% 50%; top: 9px;
+    }
+    .icing::before { left: 20px; }
+    .icing::after  { right: 26px; }
+    .cherry {
+      position: absolute; width: 12px; height: 12px;
+      background: #e07070; border-radius: 50%; top: -4px;
+    }
+    .c1 { left: 26px; } .c2 { left: 64px; } .c3 { left: 102px; }
+
+    .final {
+      position: absolute; inset: 0;
+      background: #f8e0e8;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 30px; text-align: center;
+      opacity: 0; pointer-events: none; transition: opacity 1.2s ease; z-index: 50;
+      overflow: hidden;
+    }
+    .final.show { opacity: 1; pointer-events: auto; }
+
+    .final h2 {
+      color: #c45a7a;
+      font-size: 26px;
+      margin-bottom: 14px;
+      z-index: 10;
+    }
+    .final p {
+      color: #8a4a5a;
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 500px;
+      max-height: 340px;
+      overflow-y: auto;
+      z-index: 10;
+      background: rgba(255,255,255,0.8);
+      padding: 18px 24px;
+      border-radius: 14px;
+      text-align: left;
+    }
+
+    .flower {
+      position: absolute;
+      font-size: 26px;
+      animation: flowerFall linear forwards;
+      z-index: 5;
+      pointer-events: none;
+    }
+    @keyframes flowerFall {
+      0% { transform: translateY(-80px) rotate(0deg) scale(0.7); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(620px) rotate(720deg) scale(1.1); opacity: 0.9; }
+    }
+
+    .status {
+      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+      font-size: 12px; color: #6a9bb0; z-index: 5;
+    }
+
+      /* ===== MUSIC BUTTON + SONG SELECTOR ===== */
+    #music-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #e85a7a;
+      color: white;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(232, 90, 122, 0.4);
+      z-index: 200;
+      transition: all 0.25s;
+    }
+    #music-btn.muted { background: #999; }
+    #music-btn:hover { transform: scale(1.08); }
+
+    #music-panel {
+      position: fixed;
+      bottom: 90px;
+      right: 25px;
+      width: 260px;
+      background: rgba(30, 30, 47, 0.97);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      z-index: 210;
+      display: none;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.25s, transform 0.25s;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    #music-panel.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #music-panel h4 {
+      color: #e8a0bf;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .song-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 11px 12px;
+      margin-bottom: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      color: #e0e0e8;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+    .song-option:hover {
+      background: rgba(232, 90, 122, 0.18);
+      border-color: rgba(232, 90, 122, 0.4);
+    }
+    .song-option.active {
+      background: rgba(232, 90, 122, 0.28);
+      border-color: #e85a7a;
+      color: #fff;
+    }
+    .song-option .song-icon {
+      font-size: 16px;
+      width: 22px;
+      text-align: center;
+    }
+    .song-option .song-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .song-option .playing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e85a7a;
+      display: none;
+    }
+    .song-option.active .playing-dot {
+      display: block;
+      animation: pulse 1.2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .music-controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .music-ctrl-btn {
+      flex: 1;
+      padding: 9px 0;
+      border-radius: 10px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #play-pause-btn {
+      background: #e85a7a;
+      color: white;
+    }
+    #play-pause-btn:hover { background: #d44a6a; }
+    #close-music-btn {
+      background: rgba(255,255,255,0.1);
+      color: #ccc;
+    }
+    #close-music-btn:hover { background: rgba(255,255,255,0.18); }
+
+    .now-playing {
+      text-align: center;
+      font-size: 11px;
+      color: #a0a0b0;
+      margin-top: 10px;
+      min-height: 16px;
+    }
+
+    .floating-heart {
+      position: absolute;
+      font-size: 18px;
+      color: #e8a0bf;
+      animation: rise 4.5s linear forwards;
+      pointer-events: none;
+      z-index: 5;
+    }
+    @keyframes rise {
+      0% { transform: translateY(0) scale(1); opacity: 0.85; }
+      100% { transform: translateY(-450px) scale(0.4); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+   <!-- Music Button -->
+  <button id="music-btn" title="Music">🎵</button>
+
+  <!-- Song Selector Panel -->
+  <div id="music-panel">
+    <h4>🎵 Choose a Song</h4>
+    
+    <button class="song-option active" data-index="0">
+      <span class="song-icon">🎂</span>
+      <span class="song-name">Nee Kavithaigala</span>
+      <span class="playing-dot"></span>
+    </button>
+    
+    <button class="song-option" data-index="1">
+      <span class="song-icon">💖</span>
+      <span class="song-name">Moongil Thootam </span>
+      <span class="playing-dot"></span>
+    </button>
+    
+    <button class="song-option" data-index="2">
+      <span class="song-icon">🌸</span>
+      <span class="song-name">Soft Pavazha Malli </span>
+      <span class="playing-dot"></span>
+    </button>
+
+    <div class="music-controls">
+      <button class="music-ctrl-btn" id="play-pause-btn">▶ Play</button>
+      <button class="music-ctrl-btn" id="close-music-btn">Close</button>
+    </div>
+    <div class="now-playing" id="now-playing">Ready to play</div>
+  </div>
+
+
+  <!-- Accept -->
+  <div class="laptop show" id="accept-screen">
+    <div class="screen">
+      <div class="star">★</div>
+      <div class="web">🕸️</div>
+      <div class="title-text">PLEASE ACCEPT THE GIFT</div>
+      <img src="kutty1.jpg" class="ghost-img" alt="Ghost">
+      <div class="heart-buttons">
+        <button class="heart-btn" onclick="goToGifts()">Yes</button>
+        <button class="heart-btn" onclick="goToNo()">No</button>
+      </div>
+    </div>
+    <div class="laptop-base"></div>
+  </div>
+
+  <!-- No -->
+  <div class="laptop" id="no-screen">
+    <div class="screen">
+      <div class="star">★</div>
+      <div class="web">🕸️</div>
+      <div class="title-text">WHY DID YOU CLICK NO!</div>
+      <img src="kutty.jpg" class="sad-img" alt="Sad">
+      <button class="sorry-btn" onclick="backToAccept()">Click Yes</button>
+    </div>
+    <div class="laptop-base"></div>
+  </div>
+
+  <!-- Choose Gifts -->
+  <div class="laptop" id="gifts-screen">
+    <div class="screen">
+      <div class="star">★</div>
+      <div class="web">🕸️</div>
+      <div class="title-text">Choose Your Gifts</div>
+      <div class="gifts-row">
+        <div class="gift-item" onclick="showGift('letter')">
+          <img src="envelope.avif" alt="Letter">
+          <div class="gift-label">Letter</div>
+        </div>
+        <div class="gift-item" onclick="showGift('flowers')">
+          <img src="flowers.webp" alt="Tulips">
+          <div class="gift-label">Lilles</div>
+        </div>
+        <div class="gift-item" onclick="showGift('box')">
+          <img src="giftbox.jpg" alt="Memories">
+          <div class="gift-label">Memories</div>
+        </div>
+        <div class="gift-item" onclick="showGift('heart')">
+          <img src="heart.png" alt="Heart" onerror="this.src='https://cdn-icons-png.flaticon.com/512/833/833472.png'">
+          <div class="gift-label">Heart</div>
+        </div>
+      </div>
+    </div>
+    <div class="laptop-base"></div>
+  </div>
+
+  <!-- Letter -->
+  <div class="laptop" id="letter-screen">
+    <div class="screen">
+      <div class="star">★</div>
+      <div class="web">🕸️</div>
+      <div class="gift-content">
+        <h2>A Letter For You</h2>
+        <div class="letter-paper">
+          To My Appu Kutty, My Everything ❤️🧿,<br><br>
+          Happy Birthday, My Chellameyyy. 🥹❤️<br><br>
+           Honestly ennaku theriyala di  where to start, because how am I supposed to put everything I feel about  you into words?  No matter how much I write, I don't think I'll ever be able to explain just how special you are to me di loosu .<br><br>
+          Sometimes umm i mean always kutty  I sit and think about how lucky I am that I got you in my life .  God gave me you di , God Gifted me you di kutty , You are the precious gift that i have recieved from god and i am always grateful for that kutty thangameyyy , And if you ask me what one of the most beautiful gifts I've ever received is, my answer will always be you, my chellaKutty. ❤️<br><br>
+          You're so  special to me because of just one thing. It's everything about you, Parru. Your smile, your little habits, the way you talk, the way you make me feel, the tiniest things you do without even realising them , your cute reactions , your support , and ofcoursee loosu your eyes yemmahhh 🫠 ,One look of yours  and the next second I am Cooked heheehee 😂😊 , "Unn Kanne Aayirum Kadhai Peasudheee!!!" 🥰🥰🫠🫠It's how you can make an ordinary day feel special just by being part of it kutty .<br><br>
+          And I hope you know this, thangameyyy: you never have to be perfect for me. You don't have to be happy every second, hide your sadness, or pretend everything is okay when it isn't. I want you to feel that you can be yourself with me and YOU ARE ENOUGH FOR ME DI LOOSUUU , NEE ENNAKU POOTHUM DI KUTTYY. NEE MATTUM POOTHUM ENNAKU 😊🥰🧿❤️<br><br>
+          I wish I could be beside you right now, hug you as tightly as I possibly could, Kiss U ,  look at you, Make u Blush, Tease u , Irritate U , tell U some lame jokes and Laugh At it and tell you all of these  while seeing that beautiful Face, Eyes and smile of yours.<br><br>
+          Thank you for being you , Kutty. Thank you for being with me and taking  care of  me and everyone chella kutty , I will always always be proud of you di kutty and I will always be with you Forever Chellamey 😊🧿❤️ <br><br>
+         <strong> You are, and will always be, one of the most precious gifts God has placed in my life. Touchwood, my Appu Kutty.</strong> 🧿❤️<br><br>
+          <strong>Happy Birthday, My Pondattii , My Parvathyyyyyyyy. I love you so, so, so much Thangameyy .</strong><br><br>
+         <strong> Forever your Tutu . ❤️</strong>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn back-btn" onclick="backToGifts()">← Back</button>
+        <button class="nav-btn next-btn" onclick="goToCake()">Continue to Cake →</button>
+      </div>
+    </div>
+    <div class="laptop-base"></div>
+  </div>
+
+  <!-- Flowers -->
+  <div class="laptop" id="flowers-screen">
+    <div class="screen">
+      <div class="star">★</div>
+      <div class="web">🕸️</div>
+      <div class="gift-content">
+        <h2>Here Are Your Flowers</h2>
+        <div class="flowers-msg">
+          <strong> My Beautiful Lily Girl 🌷❤️</strong><br><br>
+          My thangameyyy, do you remember the lilies I gifted you when we met? 🥹🌷<br><br>
+          Those lilies weren't just flowers. They were part of a moment with you , A moment I get to keep in my heart and smile about whenever I think of it.<br><br>
+          And now, whenever I think about lilies, I think about you, my Kutty. ❤️<br><br>
+          If I could, I'd bring you flowers on the happiest days of your life, on the days you need a little cheering up, and even on completely ordinary days, just because seeing you smile would be reason enough.<br><br>
+          But you know what, chellameyyy? As much as I love  giving you those lilies, I'm even more grateful for the person I got to give them to.<br><br>
+          <strong>Some flowers become memories, and some memories become priceless because they happened with you Chellameyyy!! 🥰😘🧿❤️.</strong><br><br>
+          <strong>Always Be Happy my Appu Kutty , My favourite girl, today and always , I will always Be with u di kutty forever beside You 😊😘🧿❤️🌷</strong> 
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn back-btn" onclick="backToGifts()">← Back</button>
+        <button class="nav-btn next-btn" onclick="goToCake()">Continue to Cake →</button>
+      </div>
+    </div>
+    <div class="laptop-base"></div>
+  </div>
+
+  <!-- Memories -->
+  <div class="laptop" id="box-screen">
+    <div class="screen">
+      <div class="star">★</div>
+      <div class="web">🕸️</div>
+      <div class="gift-content" style="padding-top: 12px;">
+        <h2>Our Memories</h2>
+        <p style="color:#5a9bb8; font-size:13px; margin-bottom: 10px;"> A little box Of cute Your Memories!😊🧿❤️</p>
+        <div class="photos-grid">
+          <!-- Replace these with your real photos -->
+          <img src="pics/12.jpeg">
+          <img src="pics/14.jpeg">
+          <img src="pics/33.jpeg">
+          <img src="pics/40.jpg">
+          <img src="pics/41.jpeg">
+          <img src="pics/42.jpeg">
+          <img src="pics/50.jpeg">
+          <img src="pics/58.jpeg">
+          <img src="pics/59.jpeg">
+          <img src="pics/63.jpeg">
+          <img src="pics/65.jpeg">
+          <img src="pics/11.jpeg">
+          <img src="pics/1.jpeg">
+          <img src="pics/20.jpeg">
+          <img src="pics/53.jpg">
+          <img src="pics/6.jpg">
+          <img src="pics/2.jpeg">
+          <img src="pics/15.jpeg">
+          <img src="pics/23.webp">
+          <img src="pics/24.webp">
+          <img src="pics/25.webp">
+          <img src="pics/26.webp">
+          <img src="pics/27.webp">
+          <img src="pics/28.webp">
+          <img src="pics/29.jpeg">
+          <img src="pics/30.jpeg">
+          <img src="pics/31.jpeg">
+          <img src="pics/32.jpeg">
+          <img src="pics/34.jpg">
+          <img src="pics/35.jpeg">
+          <img src="pics/36.jpeg">
+          <img src="pics/37.jpeg">
+          <img src="pics/38.jpeg">
+          <img src="pics/39.jpg">
+          <img src="pics/40.jpg">
+          <img src="pics/41.jpeg">
+          <img src="pics/42.jpeg">
+          <img src="pics/43.jpeg">
+          <img src="pics/44.jpeg">
+          <img src="pics/45.jpeg">
+          <img src="pics/46.jpeg">
+          <img src="pics/47.jpeg">
+          <img src="pics/48.jpeg">
+          <img src="pics/66.jpeg">
+          <img src="pics/67.jpeg">
+          <img src="pics/60.jpeg">
+
+          
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn back-btn" onclick="backToGifts()">← Back</button>
+        <button class="nav-btn next-btn" onclick="goToCake()">Continue to Cake →</button>
+      </div>
+    </div>
+    <div class="laptop-base"></div>
+  </div>
+
+  <!-- Heart -->
+  <div class="laptop" id="heart-screen">
+    <div class="screen">
+      <div class="star">★</div>
+      <div class="web">🕸️</div>
+      <div class="gift-content">
+        <h2>My Heart is Full of YOU and US ❤️🧿🧿</h2>
+        <div id="heart-final"></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn back-btn" onclick="backToGifts()">← Back</button>
+        <button class="nav-btn next-btn" onclick="goToCake()">Continue to Cake →</button>
+      </div>
+    </div>
+    <div class="laptop-base"></div>
+  </div>
+
+  <!-- Cake -->
+  <div class="laptop" id="cake-screen">
+    <div class="screen">
+      <div class="star">★</div>
+      <div class="web">🕸️</div>
+      <div class="bunting">
+        <div class="flag">H</div><div class="flag">A</div><div class="flag">P</div>
+        <div class="flag">P</div><div class="flag">Y</div><div class="flag"> </div>
+        <div class="flag">B</div><div class="flag">D</div><div class="flag">A</div><div class="flag">Y</div>
+      </div>
+      <div class="title">Happy Birthday</div>
+      <div class="subtitle">MAKE A WISH!</div>
+      <button class="blow-btn" id="blowBtn">✨ BLOW THE CANDLES</button>
+
+      <div class="cake-wrap">
+        <div class="candles">
+          <div class="candle"><div class="flame"></div></div>
+          <div class="candle"><div class="flame"></div></div>
+          <div class="candle"><div class="flame"></div></div>
+          <div class="candle"><div class="flame"></div></div>
+          <div class="candle"><div class="flame"></div></div>
+        </div>
+        <div class="cake">
+          <div class="layer-top">
+            <div class="icing"></div>
+            <div class="cherry c1"></div>
+            <div class="cherry c2"></div>
+            <div class="cherry c3"></div>
+          </div>
+          <div class="layer-bottom"></div>
+        </div>
+      </div>
+
+      <div class="status" id="status">Blow into the mic or click the button</div>
+
+      <div class="final" id="final">
+        <h2>Happy Birthday My Thangameyyy !!❤️❤️❤️ </h2>
+        <p>
+          <strong>HAPPIEST 18TH BIRTHDAY TO MY APPU KUTTY, MY PARRU, MY CHELLAMEYYY, MY THANGAMEYYY, MY PONDATTI ,MY FAVOURITE PERSONNNN, MY EVERYTHING ! 😘😘🧿❤️❤️❤️</strong><br><br> 
+          If I could give you one thing for your birthday, it wouldn't just be flowers, gifts, or anything money could buy. I'd give you the ability to see yourself through my eyes, even for a little while. Maybe then you'd understand why you are so incredibly special to me.<br><br>
+          My chellameyyy, I Thank God everyday for Having you di kutty . Out of all the beautiful things life could have given me, getting to know you and having you in my life is something I'll always be grateful for God And U Appu. Touchwood, my Loosuu 😘. 🧿❤️<br><br>
+          I wish I could be there right now to hug you so tightly, kiss your forehead, and give you all the love I've been trying to fit into this website. 😭❤️<br><br>
+          <strong>You are loved. You are precious. You are irreplaceable in my heart. And I am so, so grateful to God Kutty </strong> ❤️<br><br>
+          <strong>Kutty I will always be With U kutty forever , whatever happens i will always be there for u and be beside u di , God is with us di kutty , he will take care of us and everyone and he will keep us together always forever 🧿❤️ and  make our beautiful dreams come true di chellamey , You mean a lot to me di kutty , U are My everything kutty chellameyy , Naa iruken di unnoda Epolthumey 😊😘🧿❤️. </strong><br><br>
+          <strong>Happy Birthday, my Appu Kutty. I love you sooooo muchhh di Kutty , my chellameyyy! 😊❤️🎂🌷<br><br></strong>
+          <strong>Forever and always, your Tutu. 😊❤️🧿 </strong>
+        </p>
+      </div>
+    </div>
+    <div class="laptop-base"></div>
+  </div>
+
+  <audio id="bgMusic" loop></audio>
+
+  <script>
+     // ===== 3 SONGS CONFIG =====
+    // Put your 3 mp3 files in the same folder as this HTML
+    const songs = [
+      {
+        name: "Nee Kavithaigala ",
+        file: "audio/nee-kavithaigala.mp3",
+        icon: "🥰"
+      },
+      {
+        name: "Moongil Thottam",
+        file: "audio/moongil-thottam.mp3",          // ← change this filename
+        icon: "💖"
+      },
+      {
+        name: "Pavazha Malli ",
+        file: "audio/pavazha-malli.mp3",          // ← change this filename
+        icon: "🌸"
+      }
+    ];
+
+    let currentSongIndex = 0;
+    let musicPlaying = false;
+    let panelOpen = false;
+
+    const bgMusic     = document.getElementById('bgMusic');
+    const musicBtn    = document.getElementById('music-btn');
+    const musicPanel  = document.getElementById('music-panel');
+    const playPauseBtn= document.getElementById('play-pause-btn');
+    const closeMusicBtn = document.getElementById('close-music-btn');
+    const nowPlaying  = document.getElementById('now-playing');
+    const songOptions = document.querySelectorAll('.song-option');
+
+    // Load first song
+    function loadSong(index) {
+      currentSongIndex = index;
+      bgMusic.src = songs[index].file;
+      bgMusic.load();
+
+      // Update UI
+      songOptions.forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+      });
+      nowPlaying.textContent = `Selected: ${songs[index].name}`;
+    }
+
+    // Initial load
+    loadSong(0);
+
+    function playMusic() {
+      bgMusic.volume = 0.32;
+      bgMusic.play().then(() => {
+        musicPlaying = true;
+        musicBtn.textContent = '🎵';
+        musicBtn.classList.remove('muted');
+        playPauseBtn.textContent = '⏸ Pause';
+        nowPlaying.textContent = `Now playing: ${songs[currentSongIndex].name}`;
+      }).catch(() => {
+        nowPlaying.textContent = 'Click Play to start (browser blocked autoplay)';
+      });
+    }
+
+    function pauseMusic() {
+      bgMusic.pause();
+      musicPlaying = false;
+      musicBtn.textContent = '🔇';
+      musicBtn.classList.add('muted');
+      playPauseBtn.textContent = '▶ Play';
+      nowPlaying.textContent = `Paused: ${songs[currentSongIndex].name}`;
+    }
+
+    function togglePlay() {
+      if (musicPlaying) pauseMusic();
+      else playMusic();
+    }
+
+    // Song option click
+    songOptions.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.index);
+        const wasPlaying = musicPlaying;
+
+        loadSong(idx);
+
+        if (wasPlaying) {
+          // Continue playing the new song
+          playMusic();
+        } else {
+          nowPlaying.textContent = `Selected: ${songs[idx].name} – press Play`;
+        }
+      });
+    });
+
+    // Main music button → open/close panel
+    musicBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      panelOpen = !panelOpen;
+      musicPanel.classList.toggle('show', panelOpen);
+    });
+
+    // Play / Pause button inside panel
+    playPauseBtn.addEventListener('click', () => {
+      togglePlay();
+    });
+
+    // Close panel
+    closeMusicBtn.addEventListener('click', () => {
+      panelOpen = false;
+      musicPanel.classList.remove('show');
+    });
+
+    // Close panel when clicking outside
+    document.addEventListener('click', (e) => {
+      if (panelOpen && !musicPanel.contains(e.target) && e.target !== musicBtn) {
+        panelOpen = false;
+        musicPanel.classList.remove('show');
+      }
+    });
+    const acceptScreen  = document.getElementById('accept-screen');
+    const noScreen      = document.getElementById('no-screen');
+    const giftsScreen   = document.getElementById('gifts-screen');
+    const letterScreen  = document.getElementById('letter-screen');
+    const flowersScreen = document.getElementById('flowers-screen');
+    const boxScreen     = document.getElementById('box-screen');
+    const heartScreen   = document.getElementById('heart-screen');
+    const cakeScreen    = document.getElementById('cake-screen');
+    const blowBtn       = document.getElementById('blowBtn');
+    const final         = document.getElementById('final');
+    const status        = document.getElementById('status');
+    const flames        = document.querySelectorAll('.flame');
+
+    let blown = false;
+  
+
+    function hideAll() {
+      [acceptScreen, noScreen, giftsScreen, letterScreen, flowersScreen, boxScreen, heartScreen, cakeScreen]
+        .forEach(s => {
+          s.classList.remove('show');
+          s.style.display = 'none';
+        });
+    }
+
+    function showScreen(screen) {
+      hideAll();
+      screen.style.display = 'block';
+      setTimeout(() => screen.classList.add('show'), 20);
+    }
+
+    function goToGifts() {
+    // Auto start music when accepting gift
+      if (!musicPlaying) {
+        playMusic();
+      }
+      showScreen(giftsScreen);
+      spawnHearts();
+    }
+
+    function goToNo() {
+      showScreen(noScreen);
+    }
+
+    function backToAccept() {
+      showScreen(acceptScreen);
+    }
+
+    function showGift(type) {
+      if (type === 'letter')  showScreen(letterScreen);
+      if (type === 'flowers') showScreen(flowersScreen);
+      if (type === 'box')     showScreen(boxScreen);
+      if (type === 'heart') {
+        showScreen(heartScreen);
+        setTimeout(buildHeart, 80);
+      }
+      spawnHearts();
+    }
+
+    function backToGifts() {
+      showScreen(giftsScreen);
+    }
+
+    function goToCake() {
+      showScreen(cakeScreen);
+      startMic();
+      spawnHearts();
+    }
+
+    function buildHeart() {
+      const container = document.getElementById('heart-final');
+      container.innerHTML = '';
+      const points = [];
+
+      for (let t = 0; t < Math.PI * 2; t += 0.15) {
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+        points.push({ x, y });
+      }
+      for (let i = 0; i < 18; i++) {
+        const t = Math.random() * Math.PI * 2;
+        const r = 0.3 + Math.random() * 0.65;
+        const x = 16 * Math.pow(Math.sin(t), 3) * r;
+        const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * r;
+        points.push({ x, y });
+      }
+
+      // ←←← PUT YOUR REAL PHOTOS HERE ←←←
+      const myPhotos = [
+        "pics/2.jpeg",
+        "pics/3.jpeg",
+        "pics/4.jpeg",
+        "pics/5.jpeg",
+        "pics/6.jpg",
+        "pics/7.jpeg",
+        "pics/8.jpeg",
+        "pics/9.jpeg",
+        "pics/17.jpeg",
+        "pics/18.jpeg",
+        "pics/19.jpeg",
+        "pics/21.jpeg",
+        "pics/22.jpeg",
+        "pics/60.jpeg",
+        "pics/16.jpeg",
+        "pics/17.jpeg",
+        "pics/18.jpeg",
+        "pics/19.jpeg",
+        "pics/52.jpeg",
+        
+        
+        
+        
+        // add more (20-40 photos best)
+      ];
+
+      points.forEach((p, i) => {
+        const img = document.createElement('img');
+        img.className = 'p';
+        img.src = myPhotos[i % myPhotos.length];
+        const s = 9.8;
+        img.style.left = `calc(50% + ${p.x * s}px - 23px)`;
+        img.style.top  = `calc(50% + ${p.y * s}px - 23px)`;
+        container.appendChild(img);
+      });
+
+      for (let i = 0; i < 25; i++) {
+        const sp = document.createElement('div');
+        sp.className = 'spark';
+        sp.style.left = Math.random() * 100 + '%';
+        sp.style.top = Math.random() * 100 + '%';
+        sp.style.animationDelay = (Math.random() * 2) + 's';
+        container.appendChild(sp);
+      }
+    }
+
+    function spawnHearts() {
+      for (let i = 0; i < 6; i++) {
+        setTimeout(() => {
+          const heart = document.createElement('div');
+          heart.className = 'floating-heart';
+          heart.textContent = '♡';
+          heart.style.left = Math.random() * 90 + 5 + '%';
+          heart.style.bottom = '8%';
+          heart.style.fontSize = (14 + Math.random() * 12) + 'px';
+          const current = document.querySelector('.laptop.show .screen');
+          if (current) current.appendChild(heart);
+          setTimeout(() => heart.remove(), 4500);
+        }, i * 280);
+      }
+    }
+
+    function startFlowerRain() {
+      const flowers = ['🌹', '🌸', '💮', '🌺', '🌷'];
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const f = document.createElement('div');
+          f.className = 'flower';
+          f.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+          f.style.left = Math.random() * 100 + '%';
+          f.style.fontSize = (22 + Math.random() * 24) + 'px';
+          f.style.animationDuration = (3.5 + Math.random() * 3) + 's';
+          final.appendChild(f);
+          setTimeout(() => f.remove(), 7000);
+        }, i * 90);
+      }
+    }
+
+    function blowOut() {
+      if (blown) return;
+      blown = true;
+      flames.forEach((f, i) => setTimeout(() => f.classList.add('out'), i * 130));
+      blowBtn.disabled = true;
+      blowBtn.innerHTML = '✨ Wish granted!';
+      status.textContent = '';
+
+      setTimeout(() => {
+        final.classList.add('show');
+        startFlowerRain();
+      }, 1100);
+    }
+    blowBtn.onclick = blowOut;
+
+    async function startMic() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioCtx.createMediaStreamSource(stream);
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+        const data = new Uint8Array(analyser.frequencyBinCount);
+
+        function check() {
+          if (blown) return;
+          analyser.getByteFrequencyData(data);
+          let sum = 0;
+          for (let i = 0; i < data.length; i++) sum += data[i];
+          if (sum / data.length > 40) {
+            blowOut();
+            stream.getTracks().forEach(t => t.stop());
+            return;
+          }
+          requestAnimationFrame(check);
+        }
+        check();
+        status.textContent = 'Mic is live – blow hard!';
+      } catch (e) {
+        status.textContent = 'Mic not available – just click the button';
+      }
+    }
+
+    setTimeout(spawnHearts, 600);
+  </script>
+</body>
+</html>
+
